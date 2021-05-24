@@ -1,3 +1,8 @@
-import Waveform from './Wrapper';
+import 'babel-polyfill';
+import React from 'react';
+import { render } from 'react-dom';
+import { App } from './App';
 
-export default Waveform;
+const appElement = document.getElementById('root');
+
+render(<App />, appElement);
