@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 import React, { useRef } from 'react';
 import { render } from 'react-dom';
-import { getAudioBuffer, getContext, drawWaveform } from './utils';
+import { drawWaveform } from './utils';
 
 export function App() {
   const canvasRef = useRef();
@@ -14,12 +14,16 @@ export function App() {
       id='file'
       onChange={event => {
         const files = event.target.files;
-        const context = getContext();
-        context.resume().then(() => {
+        const context = (new (window.AudioContext
+          || window.webkitAudioContext
+          || window.mozAudioContext
+          || window.oAudioContext)());
+        context.resume().then(async () => {
           const filePath = window.URL.createObjectURL(files[0]);
-          getAudioBuffer(filePath, context).then(buffer =>
-            drawWaveform(buffer, canvasRef.current, 300, 800)
-          );
+          const response = await fetch(filePath);
+          const audioData = await response.arrayBuffer();
+          const buffer = await context.decodeAudioData(audioData);
+          drawWaveform(buffer, canvasRef.current, 300, 800);
         });
       }}
     />

@@ -1,26 +1,4 @@
 /**
- * From url file path download and return Audio Buffer
- */
-export async function getAudioBuffer(path, context) {
-  const response = await fetch(path);
-  const audioData = await response.arrayBuffer();
-  return new Promise(resolve =>
-    context.decodeAudioData(audioData, buffer => resolve(buffer))
-  );
-};
-/**
- * Get window audio context
- */
-export function getContext() {
-  window.AudioContext =
-    window.AudioContext ||
-    window.webkitAudioContext ||
-    window.mozAudioContext ||
-    window.oAudioContext;
-  const context = new AudioContext();
-  return context;
-};
-/**
  * Draw a waveform on a canvas
  */
 export function drawWaveform(buffer, canvas, height, width) {
